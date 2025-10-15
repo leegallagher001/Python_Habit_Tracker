@@ -12,25 +12,40 @@ database = "habits.json" # specifies the .json file that we'll be using to hold 
 
 # (1) Define Functions
 
-def addHabit(habits):  # Menu Option 1
-    global database
-    with open(database, "a") as f:
-        json.dump(habits, f, indent=2)
-        f.write('\n')
-        f.write('\n')
+def addHabit():  # Menu Option 1
+
+    name = input("Enter the name of the new habit: ")
+    try:
+        with open(database, 'r') as f:
+            habits = json.load(f)
+    except json.JSONDecodeError:
+
+        habits = []
+
+    new_habit = {
+        "name": name
+    }
+
+    habits.append(new_habit)
+
+    with open(database, 'w') as f:
+        json.dump(habits, f, indent=4)
 
 def showHabits():  # Menu Option 3 (will be a work in progress for a LONG time)
-    names = []
-    global database
-    if os.path.exists(database):
-        with open(database, "r") as f:
-            for key in f:
-                for name in key:
-                    names.append(name)
-                    print(name)
 
-    else:
-        print("No file present")
+   try:
+       with open(database, 'r') as f:
+           habits = json.load(f)
+   except (FileNotFoundError, json.JSONDecodeError):
+       print("No habits found.")
+       return
+
+   if not habits:
+       print("No habits found.")
+   else:
+       print("Your Habits:")
+       for i, habit in enumerate(habits, start=1):
+           print(f"{i}. {habit['name']}")
 
 # (2) Opening Statement
 
@@ -57,18 +72,10 @@ menuChoice = int(input("Choose Your Option: "))
 while menuChoice != 4:
 
     if menuChoice == 1:
-        name = input("Which habit would you like to add?: ")
-        lowername = name.lower()
-        key = lowername.replace(" ", "_")
 
-        habits =  { key: {
-                "name": name,
-                "log": [],
-              }}
+        addHabit()
 
-        addHabit(habits)
-
-        print("Habbit Added: ", name)
+        print("Habbit Added: ", )
         print("\n")
         menuChoice = int(input("Select Another Option: "))
         
@@ -78,7 +85,9 @@ while menuChoice != 4:
         menuChoice = int(input("Select Another Option: "))
 
     elif menuChoice == 3:
+
         showHabits()
+
         print("\n")
         menuChoice = int(input("Select Another Option: "))
 
