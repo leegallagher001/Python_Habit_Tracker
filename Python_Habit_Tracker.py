@@ -12,18 +12,25 @@ database = "habits.json" # specifies the .json file that we'll be using to hold 
 
 # (1) Define Functions
 
-def showHabits():
-    global database
-    if os.path.exists(database):
-        with open(database, "r") as f:
-            return json.load(f)
-    else:
-        print("No file present")
-
-def addHabit(habits):
+def addHabit(habits):  # Menu Option 1
     global database
     with open(database, "a") as f:
         json.dump(habits, f, indent=2)
+        f.write('\n')
+        f.write('\n')
+
+def showHabits():  # Menu Option 3 (will be a work in progress for a LONG time)
+    names = []
+    global database
+    if os.path.exists(database):
+        with open(database, "r") as f:
+            for key in f:
+                for name in key:
+                    names.append(name)
+                    print(name)
+
+    else:
+        print("No file present")
 
 # (2) Opening Statement
 
@@ -51,15 +58,13 @@ while menuChoice != 4:
 
     if menuChoice == 1:
         name = input("Which habit would you like to add?: ")
-        uppername = name.upper()
-        key = uppername.replace(" ", "_")
+        lowername = name.lower()
+        key = lowername.replace(" ", "_")
 
-        habits = {
-            key: {
+        habits =  { key: {
                 "name": name,
-                "log": []
-            }
-        }
+                "log": [],
+              }}
 
         addHabit(habits)
 
@@ -73,6 +78,7 @@ while menuChoice != 4:
         menuChoice = int(input("Select Another Option: "))
 
     elif menuChoice == 3:
+        showHabits()
         print("\n")
         menuChoice = int(input("Select Another Option: "))
 
