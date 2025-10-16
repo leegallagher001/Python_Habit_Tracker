@@ -7,6 +7,7 @@
 
 import json
 import os
+import datetime
 
 database = "habits.json" # specifies the .json file that we'll be using to hold our habit data
 
@@ -23,7 +24,8 @@ def addHabit():  # Menu Option 1
         habits = []
 
     new_habit = {
-        "name": name
+        "name": name,
+        "log": []
     }
 
     habits.append(new_habit)
@@ -31,7 +33,28 @@ def addHabit():  # Menu Option 1
     with open(database, 'w') as f:
         json.dump(habits, f, indent=4)
 
-def showHabits():  # Menu Option 3 (will be a work in progress for a LONG time)
+def markHabitAsDone():  # Menu Option 2 - Work In Progress
+
+    # Lots of comments on this one as this problem took me a while to understand as I am a beginner to using JSON with Python
+
+    today = datetime.date.today().isoformat() # stores today's date in a variable to be appended later
+
+    habit_to_log = input("Please enter the name of habit to log today: ") # user enters habit name
+
+    with open(database, 'r') as f: # allows Python to read the file and manipulate it
+        habits = json.load(f)
+
+    for habit in habits: # accesses individual 'habit' dictionaries from the overall habits JSON file
+        if habit_to_log == habit["name"]: # finds the specific habit of the name the user is looking for
+            if today in habit["log"]: # checks to make sure the habit hasn't been previously logged today
+                print("Already logged today!")
+            else:
+                habit["log"].append(today) # adds today's date to the 'log' value of the dictionary
+
+    with open(database, 'w') as f: # writes the updated 'habits' dictionary to the JSON file
+        json.dump(habits, f, indent=4)
+
+def showHabits():  # Menu Option 3
 
    try:
        with open(database, 'r') as f:
@@ -80,7 +103,9 @@ while menuChoice != 4:
         menuChoice = int(input("Select Another Option: "))
         
     elif menuChoice == 2:
-        print("Section In Progress")
+        
+        markHabitAsDone()
+
         print("\n")
         menuChoice = int(input("Select Another Option: "))
 

@@ -1,8 +1,14 @@
 [
     {
-        "name": "Drink Water"
+        "name": "Drink Water",
+        "log": [
+            "2025-10-16"
+        ]
     },
     {
-        "name": "Walk 10,000 Steps"
+        "name": "Walk 3,000 Steps",
+        "log": [
+            "2025-10-16"
+        ]
     }
 ]
